@@ -10,10 +10,7 @@ public class ActivityBook extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
-        WebView webView = findViewById(R.id.web);
-        try {
-            webView.loadUrl(this.getIntent().getStringExtra("URI"));
-        } catch (Exception e) {
-        }
+        webView = findViewById(R.id.web);
+        webView.loadUrl(this.getIntent().getStringExtra("URI"));
     }
 }

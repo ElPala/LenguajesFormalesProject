@@ -3,12 +3,12 @@
     <string-array name="books">
         <item>Dracula by Bram Stoker</item>
         <item>The Picture of Dorian Gray by Oscar Wilde</item>
-        <item>Don Quixote by Miguel de Cervantes Saavedra</item>
+        <item>Don Quixote by Miguel de Cervantes Saavedra (Español)</item>
         <item>The Adventures of Sherlock Holmes by Arthur Conan Doyle</item>
         <item>The Legend of Sleepy Hollow by Washington Irving</item>
     </string-array>
     <string name="top">http://www.gutenberg.org/ebooks/search/%3Fsort_order%3Ddownloads</string>
-    <string name="quixote">http://www.gutenberg.org/cache/epub/996/pg996-images.html</string>
+    <string name="quixote">http://www.gutenberg.org/files/2000/2000-h/2000-h.htm</string>
     <string name="legend">http://www.gutenberg.org/files/41/41-h/41-h.htm</string>
     <string name="sherlock">http://www.gutenberg.org/files/1661/1661-h/1661-h.htm</string>
     <string name="dracula">http://www.gutenberg.org/files/345/345-h/345-h.htm</string>
