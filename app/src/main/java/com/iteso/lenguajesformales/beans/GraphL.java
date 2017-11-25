@@ -59,9 +59,12 @@ public class GraphL {
                     x = pos.remove(pos.size() - 1);
                     match[inc.remove(inc.size()-1)]++;
                     inc.clear();
-                    pos.clear();
+                    inc.clear();
+                    aux=root;
+                }else if (aux!=root){
+                    x--;
+                    aux=root;
                 }
-                aux=root;
                 continue;
             }else {
                 if(aux.ok && aux.list.isEmpty()){

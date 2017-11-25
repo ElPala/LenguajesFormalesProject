@@ -4,17 +4,18 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.iteso.lenguajesformales.beans.GraphL;
@@ -31,6 +32,7 @@ public class ActivityMain extends AppCompatActivity implements AdapterView.OnIte
     private String uri;
     private final int MYREQUEST = 7855;
     private EditText editText;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class ActivityMain extends AppCompatActivity implements AdapterView.OnIte
         see.setOnClickListener(this);
         start.setOnClickListener(this);
         editText.setText("");
+        progressBar = findViewById(R.id.progress);
     }
 
     public void getBook(String fileName) {
@@ -110,7 +113,6 @@ public class ActivityMain extends AppCompatActivity implements AdapterView.OnIte
                 } else {
                     Intent intent = new Intent(this,ActivityBook.class);
                     intent.putExtra("URI",uri);
-                    Log.d("error", "onCreate: "+uri.toString());
                     startActivity(intent);
                 }
                 break;
@@ -118,22 +120,11 @@ public class ActivityMain extends AppCompatActivity implements AdapterView.OnIte
                 if(!editText.getText().toString().equals("")){
                     start.setClickable(false);
                     see.setClickable(false);
-                    View view = getCurrentFocus();
                     String s[] = editText.getText().toString().split("//");
-                    GraphL graphL = new GraphL(s);
-                    graphL.check(book);
-                    for (int i =0; i<s.length;i++){
-                        s[i]+=" - "+graphL.getMatch()[i];
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putCharSequenceArray("RESULTS",s);
-                    ResultDialogFragment dialog =  ResultDialogFragment.newInstance();
-                    dialog.setArguments(bundle);
-                    dialog.show(getSupportFragmentManager(),"DIALOG");
-                    start.setClickable(true);
-                    see.setClickable(true);
+                    new CheckTask().execute(s);
+                    View view = getCurrentFocus();
+                    progressBar.setVisibility(View.VISIBLE);
                     if (view != null) {
-                        findViewById(R.id.main).invalidate();
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
@@ -154,7 +145,30 @@ public class ActivityMain extends AppCompatActivity implements AdapterView.OnIte
                 break;
         }
     }
+    private class CheckTask extends AsyncTask<String,Void,String[]>{
+        @Override
+        protected void onPostExecute(String[] s) {
+            Bundle bundle = new Bundle();
+            bundle.putCharSequenceArray("RESULTS",s);
+            ResultDialogFragment dialog =  ResultDialogFragment.newInstance();
+            dialog.setArguments(bundle);
+            progressBar.setVisibility(View.GONE);
+            start.setClickable(true);
+            see.setClickable(true);
+            dialog.show(getSupportFragmentManager(),"DIALOG");
 
+        }
+
+        @Override
+        protected String[] doInBackground(String... s) {
+            GraphL graphL = new GraphL(s);
+            graphL.check(book);
+            for (int i =0; i<s.length;i++){
+                s[i]+=" - "+graphL.getMatch()[i];
+            }
+            return s;
+        }
+    }
 
 
 
